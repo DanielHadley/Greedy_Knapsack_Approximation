@@ -16,10 +16,10 @@ knapsack <- function(value, weight, limit){
   df = data.frame(value, weight, benefit.to.cost) # turn it into a DF
   df <- df[with(df, order(-benefit.to.cost)), ] # Sort by benefit.to.cost
   rownames(df) <- NULL # Reset the row names for easier indexing
-  df$total.weight <- ifelse(cumsum(df$weight) <= 10, cumsum(df$weight), 0) # Add first items that fit
+  df$total.weight <- ifelse(cumsum(df$weight) <= limit, cumsum(df$weight), 0) # Add first items that fit
   # I need to add a break here if nothing fits in the bag on the first pass
   for(i in 2:nrow(df)){ #Start in row 2 because some values have been added above
-    df$total.weight[i] <- ifelse(df$weight[i] + df$total.weight[i-1] <= 12, # If adding won't go over limit
+    df$total.weight[i] <- ifelse(df$weight[i] + df$total.weight[i-1] <= limit, # If adding won't go over limit
                                  df$weight[i] + df$total.weight[i-1], df$total.weight[i-1]) # If it will, keep Weight the same
   }
   df$add <- 0
@@ -31,6 +31,6 @@ knapsack <- function(value, weight, limit){
 }
 
 # Test it
-knapsack(value, weight, 10)
+knapsack(value, weight, 14)
 
 
